@@ -1,406 +1,294 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-mood="happy" data-view="home">
 
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Mood: Jazz (Gauri)</title>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<link
-    href="https://fonts.googleapis.com/css2?family=VT323&display=swap"
-    rel="stylesheet"
->
-
-<link rel="stylesheet" href="css/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Listening Room — music for the way you feel</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
 </head>
-
 
 <body>
 
-<div class="scene" id="scene">
+  <div class="app">
 
-
-  <!-- =====================================================
-       INDIA CLOCK
-       ===================================================== -->
-
-  <div class="india-clock" id="indiaClock">
-
-    <span id="clockHours">00</span>
-    <span class="clock-colon">:</span>
-    <span id="clockMinutes">00</span>
-
-  </div>
-
-
-  <!-- =====================================================
-       JAZZ / GAURI TITLE
-       ===================================================== -->
-
-  <div class="jazz-title">
-
-    <img
-        src="assets/covers/jazz-gauri-transparent.svg"
-        alt="जैज़ (गौरी)"
-    >
-
-  </div>
-
-
-  <!-- =====================================================
-       ALBUM COVER + PLAYLIST
-       ===================================================== -->
-
-  <div class="cover-frame" id="coverFrame">
-
-
-    <!-- Permanent album cover -->
-
-    <div class="cover-frame-art" id="coverArtLarge">
-
-      <button
-          class="album-cover-button"
-          id="albumCoverButton"
-          aria-label="Open playlist"
-      >
-
-        <img
-            src="assets/covers/AlbumCover.png"
-            alt="Open playlist"
-        >
-
-      </button>
-
-    </div>
-
-
-    <!-- Current playlist information -->
-
-    <div
-        class="cover-frame-label"
-        id="nowPlayingLabel"
-    >
-        No playlist loaded yet
-    </div>
-
-
-    <!-- =================================================
-         EXPANDABLE PLAYLIST
-
-         This stays underneath the album cover and will
-         be opened by clicking the album cover.
-         ================================================= -->
-
-    <div
-        class="playlist-panel"
-        id="playlistPanel"
-    >
-
-      <div class="playlist-header">
-
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <span class="brand-mark">R</span>
         <div>
+          <div class="brand-name">Listening Room</div>
+          <div class="brand-tag">choose a mood</div>
+        </div>
+      </div>
 
-          <div class="playlist-heading">
-            PLAYLIST
-          </div>
+      <nav class="side-nav" aria-label="Main">
+        <button class="nav-item is-active" data-view="home"><span class="nav-icon">&#8962;</span> Home</button>
+        <button class="nav-item" data-view="discover"><span class="nav-icon">&#8981;</span> Search</button>
+        <button class="nav-item" data-view="moods"><span class="nav-icon">&#9776;</span> Your Library</button>
+      </nav>
 
-          <div
-              class="playlist-name"
-              id="playlistName"
-          >
-              Mood: Jazz (Gauri)
-          </div>
+      <div class="sidebar-moods">
+        <div class="sidebar-label">Moods</div>
+        <div class="mood-stack" id="sidebarMoods"></div>
+      </div>
 
+      <div class="sidebar-playlists">
+        <div class="sidebar-label sidebar-label--row">
+          <span>Playlists</span>
+          <button class="side-add" type="button" aria-label="New playlist">+</button>
+        </div>
+        <button class="side-link" data-view="favourites"><span class="nav-icon">&#9829;</span> Liked Songs</button>
+        <button class="side-link" data-view="recent"><span class="nav-icon">&#9719;</span> Recently Played</button>
+        <button class="side-link" data-view="playlists"><span class="nav-icon">&#8801;</span> Your Playlists</button>
+      </div>
+
+      <div class="sidebar-foot">
+        <span id="indiaClock" class="side-clock">
+          <span id="clockHours">00</span><span class="clock-colon">:</span><span id="clockMinutes">00</span>
+          <span class="clock-place">India</span>
+        </span>
+      </div>
+    </aside>
+
+    <div class="shell">
+
+      <header class="topbar">
+        <div class="search-bar" role="search">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/>
+            <path d="M20 20l-3.5-3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <input type="search" id="librarySearch" placeholder="Search for songs, artists, albums or moods..." autocomplete="off">
+        </div>
+        <button class="icon-round" type="button" aria-label="Notifications">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/>
+            <path d="M13.7 21a2 2 0 0 1-3.4 0"/>
+          </svg>
+        </button>
+        <div class="avatar" title="You" aria-hidden="true">R</div>
+      </header>
+
+      <main class="main" id="main">
+
+        <section class="view is-visible" data-view-panel="home" id="viewHome">
+
+          <section class="hero" id="moodHero">
+            <div class="hero-copy">
+              <p class="eyebrow" id="heroEyebrow">Good evening</p>
+              <h1 id="heroHeadline">Welcome to Listening Room</h1>
+              <p class="lede" id="heroLede">Pick a mood, press play, and let the music set the tone.</p>
+              <div class="hero-actions">
+                <button class="btn-play" id="heroPlayBtn" type="button">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                  Play
+                </button>
+                <button class="btn-ghost" id="heroShuffleBtn" type="button">Shuffle</button>
+              </div>
+            </div>
+            <div class="hero-quote">
+              <p>&ldquo;Music gives a soul to the universe, wings to the mind, flight to the imagination, and life to everything.&rdquo;</p>
+              <span>&mdash; Plato</span>
+            </div>
+          </section>
+
+          <section class="block" id="librarySearchResults" hidden>
+            <div class="block-head">
+              <h2>In your library</h2>
+            </div>
+            <div class="card-grid" id="librarySearchGrid"></div>
+          </section>
+
+          <section class="block" id="moodLibrary">
+            <div class="block-head block-head--row">
+              <h2 id="sectionTitle">Happy</h2>
+              <span class="block-sub" id="sectionSub"></span>
+            </div>
+            <div class="card-grid" id="moodCards"></div>
+            <p class="empty-note" id="moodEmpty" hidden></p>
+          </section>
+
+          <section class="block">
+            <div class="block-head block-head--row">
+              <h2>Choose Your Mood</h2>
+              <button class="see-all" data-view="moods" type="button">See all &rarr;</button>
+            </div>
+            <div class="explore-grid" id="exploreMoods"></div>
+          </section>
+
+          <section class="block">
+            <div class="block-head block-head--row">
+              <h2>Recently Played</h2>
+              <button class="see-all" data-view="recent" type="button">See all &rarr;</button>
+            </div>
+            <div class="card-grid" id="discoverCards"></div>
+          </section>
+
+        </section>
+
+        <section class="view" data-view-panel="discover" id="viewDiscover">
+          <header class="page-head">
+            <p class="eyebrow">Discover</p>
+            <h1>Find something for right now</h1>
+            <p class="lede">Pick a mood, or play from across the shelves you already have.</p>
+          </header>
+          <section class="block">
+            <div class="block-head">
+              <h2>From your collection</h2>
+            </div>
+            <div class="card-grid" id="discoverSearchCards"></div>
+          </section>
+        </section>
+
+        <section class="view" data-view-panel="moods" id="viewMoods">
+          <header class="page-head">
+            <p class="eyebrow">Moods</p>
+            <h1>Five rooms. One library.</h1>
+            <p class="lede">Each mood is its own playlist. Fill the empty rooms in <code>js/playlists.js</code>.</p>
+          </header>
+          <div class="explore-grid explore-grid--tall" id="moodsPageGrid"></div>
+        </section>
+
+        <section class="view" data-view-panel="playlists" id="viewPlaylists">
+          <header class="page-head">
+            <p class="eyebrow">Playlists</p>
+            <h1>Built from your moods</h1>
+          </header>
+          <div class="playlist-grid" id="playlistCards"></div>
+        </section>
+
+        <section class="view" data-view-panel="favourites" id="viewFavourites">
+          <header class="page-head">
+            <p class="eyebrow">Favourites</p>
+            <h1>Songs you kept</h1>
+          </header>
+          <div class="card-grid" id="favouriteCards"></div>
+          <p class="empty-note" id="favEmpty">No favourites yet. Tap the heart on a song or in the player.</p>
+        </section>
+
+        <section class="view" data-view-panel="recent" id="viewRecent">
+          <header class="page-head">
+            <p class="eyebrow">Recently played</p>
+            <h1>What you put on</h1>
+          </header>
+          <div class="card-grid" id="recentCards"></div>
+          <p class="empty-note" id="recentEmpty">Play something and it will show up here.</p>
+        </section>
+
+      </main>
+    </div>
+
+    <aside class="now-panel" id="nowPanel">
+      <div class="now-tabs" role="tablist">
+        <button class="now-tab is-active" data-now-tab="queue" type="button">Queue</button>
+        <button class="now-tab" data-now-tab="lyrics" type="button">Lyrics</button>
+      </div>
+
+      <div class="now-scroll">
+        <div class="now-section" data-now-pane="queue">
+          <div class="now-heading">Now Playing</div>
+          <div class="now-current" id="nowCurrent"></div>
+
+          <div class="now-heading now-heading--sub">Up Next</div>
+          <div class="now-list" id="nowQueueList"></div>
         </div>
 
+        <div class="now-section" data-now-pane="lyrics" hidden>
+          <div class="now-heading">Lyrics</div>
+          <div class="lyrics-track-info" id="lyricsTrackInfo"></div>
+          <div class="lyrics-content" id="lyricsContent">
+            <p class="lyrics-empty">No lyrics available for this track.</p>
+          </div>
+        </div>
       </div>
-
-
-      <!-- Songs will be generated by JavaScript -->
-
-      <div
-          class="playlist-songs"
-          id="playlistSongs"
-      ></div>
-
-    </div>
-
+    </aside>
 
   </div>
 
-
-  <!-- =====================================================
-       LYRICS PANEL (right column)
-       ===================================================== -->
-
-  <div class="lyrics-panel" id="lyricsPanel" aria-hidden="true">
-
-    <div class="lyrics-header">
-
-      <div class="lyrics-heading">LYRICS</div>
-
-      <button
-          class="lyrics-close-btn"
-          id="lyricsCloseBtn"
-          aria-label="Close lyrics"
-      >
-          ✕
+  <footer class="player-bar" id="playerBar">
+    <div class="bar-left">
+      <button class="bar-art" id="coverArtSmall" type="button" aria-label="Expand album art">
+        <img src="assets/covers/placeholder-cover.svg" alt="">
       </button>
-
-    </div>
-
-    <div
-        class="lyrics-track-info"
-        id="lyricsTrackInfo"
-    ></div>
-
-    <div
-        class="lyrics-content"
-        id="lyricsContent"
-    >
-        <p class="lyrics-empty">No lyrics available for this track.</p>
-    </div>
-
-  </div>
-
-
-  <!-- =====================================================
-       EXPANDED SONG COVER OVERLAY
-       ===================================================== -->
-
-  <div
-      class="cover-overlay"
-      id="coverOverlay"
-      aria-hidden="true"
-  >
-
-    <button
-        class="cover-overlay-image"
-        id="coverOverlayImage"
-        aria-label="Close expanded cover"
-    >
-
-      <img
-          src="assets/covers/placeholder-cover.svg"
-          alt="Expanded song cover"
-      >
-
-    </button>
-
-  </div>
-
-
-  <!-- =====================================================
-       BOTTOM-DOCKED PLAYER
-       ===================================================== -->
-
-  <div
-      class="player-bar"
-      id="playerBar"
-  >
-
-
-    <div
-        class="bar-art"
-        id="coverArtSmall"
-    >
-
-      <img
-          src="assets/covers/placeholder-cover.svg"
-          alt="Album cover"
-      >
-
-    </div>
-
-
-    <div class="bar-main">
-
-
-      <div class="bar-track-info">
-
-        <span
-            class="track-title"
-            id="trackTitle"
-        >
-            No track loaded
-        </span>
-
-        <span
-            class="track-artist"
-            id="trackArtist"
-        >
-            Add your playlist to get started
-        </span>
-
+      <div class="bar-meta">
+        <span class="track-title" id="trackTitle">No track loaded</span>
+        <span class="track-artist" id="trackArtist">Choose a mood to begin</span>
       </div>
+      <button class="heart-btn" id="favBtn" type="button" aria-label="Favourite">&#9825;</button>
+    </div>
 
-
+    <div class="bar-center">
       <div class="bar-transport">
-
-        <button
-            class="transport-btn"
-            id="prevBtn"
-            aria-label="Previous track"
-        >
-            ⏮
+        <button class="transport-btn" id="shuffleBtn" type="button" aria-label="Shuffle">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M17 3l4 4-4 4V8h-2.6l-2.2 2.2-1.4-1.4L13.2 6H17V3zM3 6h3.8l9.6 9.6H21v-3l3 3-3 3v-3h-5.2L6.2 6H3V6zm0 12h3.8l2.4-2.4 1.4 1.4L7.6 20H3v-2z"/></svg>
         </button>
-
-
-        <button
-            class="play-btn"
-            id="playBtn"
-            aria-label="Play"
-        >
-            ▶
+        <button class="transport-btn" id="prevBtn" type="button" aria-label="Previous">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6V6zm3.5 6 8.5 6V6l-8.5 6z"/></svg>
         </button>
-
-
-        <button
-            class="transport-btn"
-            id="nextBtn"
-            aria-label="Next track"
-        >
-            ⏭
+        <button class="play-btn" id="playBtn" type="button" aria-label="Play">
+          <svg class="icon-play" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          <svg class="icon-pause" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" hidden><path d="M6 5h4v14H6V5zm8 0h4v14h-4V5z"/></svg>
         </button>
-
-
-        <div class="bar-progress">
-
-          <span
-              class="time-elapsed"
-              id="timeElapsed"
-          >
-              0:00
-          </span>
-
-
-          <div
-              class="progress-track"
-              id="progressTrack"
-          >
-
-            <div
-                class="progress-fill"
-                id="progressFill"
-            ></div>
-
-          </div>
-
-
-          <span
-              class="time-total"
-              id="timeTotal"
-          >
-              0:00
-          </span>
-
+        <button class="transport-btn" id="nextBtn" type="button" aria-label="Next">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M16 6h2v12h-2V6zM6 18l8.5-6L6 6v12z"/></svg>
+        </button>
+        <button class="transport-btn" id="repeatBtn" type="button" aria-label="Repeat">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"/></svg>
+        </button>
+      </div>
+      <div class="bar-progress">
+        <span class="time-elapsed" id="timeElapsed">0:00</span>
+        <div class="progress-track" id="progressTrack">
+          <div class="progress-fill" id="progressFill"></div>
         </div>
-
+        <span class="time-total" id="timeTotal">0:00</span>
       </div>
-
     </div>
 
-
-    <!-- Search button -->
-
-    <button
-        class="search-btn"
-        id="searchBtn"
-        aria-label="Search online music"
-    >
-        🔍
-    </button>
-
-
-    <!-- Three-dot button + options menu -->
-
-    <div class="dots-menu-wrap">
-
-      <button
-          class="dots-btn"
-          id="dotsBtn"
-          aria-label="Player options"
-          aria-haspopup="true"
-          aria-expanded="false"
-      >
-          ⋮
+    <div class="bar-end">
+      <div class="volume-wrap" title="Volume">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M5 10v4h3l4 4V6L8 10H5zm11.5 2a3.5 3.5 0 0 0-1.8-3.1v6.2A3.5 3.5 0 0 0 16.5 12z"/></svg>
+        <input type="range" id="volumeSlider" min="0" max="1" step="0.02" value="0.9" aria-label="Volume">
+      </div>
+      <button class="text-btn ghost" id="lyricsMenuBtn" type="button" aria-label="Lyrics">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M4 6h16v2H4V6zm0 5h10v2H4v-2zm0 5h16v2H4v-2z"/></svg>
       </button>
-
-      <div
-          class="dots-menu"
-          id="dotsMenu"
-          role="menu"
-          aria-hidden="true"
-      >
-
-        <button
-            class="dots-menu-item"
-            id="lyricsMenuBtn"
-            role="menuitem"
-        >
-            Lyrics
-        </button>
-
-      </div>
-
+      <button class="text-btn ghost" id="queueBtn" type="button" aria-label="Queue">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M3 6h18v2H3V6zm0 5h18v2H3v-2zm0 5h12v2H3v-2z"/></svg>
+      </button>
+      <button class="text-btn ghost" id="expandBtn" type="button" aria-label="Expand">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h6v2H6v4H4V4zm10 0h6v6h-2V6h-4V4zM6 14v4h4v2H4v-6h2zm12 0h2v6h-6v-2h4v-4z"/></svg>
+      </button>
+      <span class="now-playing-label" id="nowPlayingLabel" hidden></span>
     </div>
+  </footer>
 
-
+  <div class="search-panel" id="searchPanel" aria-hidden="true">
+    <div class="drawer-head">
+      <div class="drawer-kicker">Audius &mdash; Online</div>
+      <button class="icon-close" id="searchCloseBtn" type="button" aria-label="Close search">&#10005;</button>
+    </div>
+    <div class="search-input-wrap">
+      <input type="text" class="search-input" id="searchInput" placeholder="Search artists and songs online" autocomplete="off" spellcheck="false">
+    </div>
+    <div class="search-results" id="searchResults">
+      <p class="search-status">Find music beyond your local library.</p>
+    </div>
   </div>
 
-
-</div>
-
-
-<!-- =====================================================
-     SEARCH PANEL (right column, mirrors lyrics panel)
-     ===================================================== -->
-
-<div class="search-panel" id="searchPanel" aria-hidden="true">
-
-  <div class="search-header">
-
-    <div class="search-heading">SEARCH</div>
-
-    <button
-        class="search-close-btn"
-        id="searchCloseBtn"
-        aria-label="Close search"
-    >
-        ✕
+  <div class="cover-overlay" id="coverOverlay" aria-hidden="true">
+    <button class="cover-overlay-image" id="coverOverlayImage" aria-label="Close expanded cover">
+      <img src="assets/covers/placeholder-cover.svg" alt="Expanded song cover">
     </button>
-
   </div>
 
-  <div class="search-input-wrap">
-    <input
-        type="text"
-        class="search-input"
-        id="searchInput"
-        placeholder="Search Audius — artists, songs…"
-        autocomplete="off"
-        spellcheck="false"
-    >
-  </div>
-
-  <div class="search-results" id="searchResults">
-    <p class="search-status">Type to discover music from Audius</p>
-  </div>
-
-</div>
-
-
-<!-- =======================================================
-     JAVASCRIPT
-     ======================================================= -->
-
-<script src="js/playlists.js"></script>
-<script src="js/script.js"></script>
-<script src="js/search.js"></script>
+  <script src="js/moods.js"></script>
+  <script src="js/playlists.js"></script>
+  <script src="js/script.js"></script>
+  <script src="js/search.js"></script>
 
 </body>
 </html>

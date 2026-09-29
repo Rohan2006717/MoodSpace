@@ -120,7 +120,6 @@ async function playOnlineTrack(track) {
 // SEARCH PANEL — DOM references
 // ─────────────────────────────────────────────────────────
 
-const searchBtn        = document.getElementById('searchBtn');
 const searchPanel      = document.getElementById('searchPanel');
 const searchInput      = document.getElementById('searchInput');
 const searchResults    = document.getElementById('searchResults');
@@ -137,7 +136,6 @@ function openSearchPanel() {
   isSearchOpen = true;
   searchPanel.classList.add('open');
   searchPanel.setAttribute('aria-hidden', 'false');
-  searchBtn.classList.add('active');
   // Focus input after transition
   setTimeout(() => searchInput.focus(), 150);
 }
@@ -146,11 +144,23 @@ function closeSearchPanel() {
   isSearchOpen = false;
   searchPanel.classList.remove('open');
   searchPanel.setAttribute('aria-hidden', 'true');
-  searchBtn.classList.remove('active');
 }
 
 function toggleSearchPanel() {
   isSearchOpen ? closeSearchPanel() : openSearchPanel();
+}
+
+/**
+ * Open the online search panel directly (optionally pre-filling a query).
+ * Used by the top search bar's Enter key.
+ */
+function openOnlineSearch(query = '') {
+  openSearchPanel();
+  if (query) {
+    searchInput.value = query;
+    clearTimeout(searchDebounce);
+    runSearch(query);
+  }
 }
 
 // ─────────────────────────────────────────────────────────
@@ -221,13 +231,6 @@ function escHtml(str) {
 // EVENT LISTENERS
 // ─────────────────────────────────────────────────────────
 
-searchBtn.addEventListener('click', (e) => {
-  e.stopPropagation();
-  // Close dots menu if open
-  if (isDotsMenuOpen) closeDotsMenu();
-  toggleSearchPanel();
-});
-
 searchCloseBtn.addEventListener('click', () => {
   closeSearchPanel();
 });
@@ -249,7 +252,7 @@ searchInput.addEventListener('keydown', (e) => {
 
 // Close when clicking outside the panel
 document.addEventListener('click', (e) => {
-  if (isSearchOpen && !searchPanel.contains(e.target) && e.target !== searchBtn) {
+  if (isSearchOpen && !searchPanel.contains(e.target)) {
     closeSearchPanel();
   }
 });
