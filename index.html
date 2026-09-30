@@ -230,7 +230,7 @@
         </button>
         <button class="play-btn" id="playBtn" type="button" aria-label="Play">
           <svg class="icon-play" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-          <svg class="icon-pause" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" hidden><path d="M6 5h4v14H6V5zm8 0h4v14h-4V5z"/></svg>
+          <svg class="icon-pause" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M6 5h4v14H6V5zm8 0h4v14h-4V5z"/></svg>
         </button>
         <button class="transport-btn" id="nextBtn" type="button" aria-label="Next">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M16 6h2v12h-2V6zM6 18l8.5-6L6 6v12z"/></svg>
@@ -279,10 +279,81 @@
     </div>
   </div>
 
-  <div class="cover-overlay" id="coverOverlay" aria-hidden="true">
-    <button class="cover-overlay-image" id="coverOverlayImage" aria-label="Close expanded cover">
-      <img src="assets/covers/placeholder-cover.svg" alt="Expanded song cover">
-    </button>
+  <div class="fs-player" id="fsPlayer" aria-hidden="true">
+    <div class="fs-bg" id="fsBg"></div>
+    <div class="fs-top-left">
+      <button class="fs-icon-btn" id="fsCloseBtn" type="button" aria-label="Close fullscreen">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+      <button class="fs-icon-btn" id="fsExpandToggle" type="button" aria-label="Toggle fullscreen">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h6v2H6v4H4V4zm10 0h6v6h-2V6h-4V4zM6 14v4h4v2H4v-6h2zm12 0h2v6h-6v-2h4v-4z"/></svg>
+      </button>
+    </div>
+    <div class="fs-top-right">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="fs-vol-icon" aria-hidden="true"><path d="M5 10v4h3l4 4V6L8 10H5zm11.5 2a3.5 3.5 0 0 0-1.8-3.1v6.2A3.5 3.5 0 0 0 16.5 12z"/></svg>
+      <input type="range" class="fs-vol-slider" id="fsVolumeSlider" min="0" max="1" step="0.02" value="0.9" aria-label="Volume">
+      <button class="fs-icon-btn fs-vol-max" id="fsVolMax" type="button" aria-label="Max volume">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M5 10v4h3l4 4V6L8 10H5zm11.5 2a3.5 3.5 0 0 0-1.8-3.1v6.2A3.5 3.5 0 0 0 16.5 12zM19 12c0 2.2-.9 4.2-2.4 5.6l1.4 1.4C20 17 21 14.6 21 12s-1-5-2.9-6.9L16.6 6.5C18.1 7.9 19 9.8 19 12z"/></svg>
+      </button>
+    </div>
+
+    <div class="fs-body" id="fsBody">
+      <div class="fs-left">
+        <div class="fs-cover-wrap">
+          <img class="fs-cover-img" id="fsCoverImg" src="assets/covers/placeholder-cover.svg" alt="Album cover">
+        </div>
+        <div class="fs-meta-row">
+          <div class="fs-meta-text">
+            <div class="fs-title" id="fsTitle">No track loaded</div>
+            <div class="fs-artist" id="fsArtist">Choose a mood to begin</div>
+          </div>
+          <div class="fs-meta-actions">
+            <button class="fs-star-btn" id="fsFavBtn" type="button" aria-label="Favourite">&#9825;</button>
+            <button class="fs-more-btn" type="button" aria-label="More">&#8942;</button>
+          </div>
+        </div>
+        <div class="fs-progress">
+          <span class="fs-time" id="fsTimeElapsed">0:00</span>
+          <div class="fs-progress-track" id="fsProgressTrack">
+            <div class="fs-progress-fill" id="fsProgressFill"></div>
+          </div>
+          <span class="fs-time" id="fsTimeTotal">0:00</span>
+        </div>
+        <div class="fs-transport">
+          <button class="fs-transport-btn" id="fsShuffleBtn" type="button" aria-label="Shuffle">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17 3l4 4-4 4V8h-2.6l-2.2 2.2-1.4-1.4L13.2 6H17V3zM3 6h3.8l9.6 9.6H21v-3l3 3-3 3v-3h-5.2L6.2 6H3V6zm0 12h3.8l2.4-2.4 1.4 1.4L7.6 20H3v-2z"/></svg>
+          </button>
+          <button class="fs-transport-btn" id="fsPrevBtn" type="button" aria-label="Previous">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6V6zm3.5 6 8.5 6V6l-8.5 6z"/></svg>
+          </button>
+          <button class="fs-play-btn" id="fsPlayBtn" type="button" aria-label="Play">
+            <svg class="fs-icon-play" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            <svg class="fs-icon-pause" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M6 5h4v14H6V5zm8 0h4v14h-4V5z"/></svg>
+          </button>
+          <button class="fs-transport-btn" id="fsNextBtn" type="button" aria-label="Next">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M16 6h2v12h-2V6zM6 18l8.5-6L6 6v12z"/></svg>
+          </button>
+          <button class="fs-transport-btn" id="fsRepeatBtn" type="button" aria-label="Repeat">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="fs-right" id="fsRight" hidden>
+        <div class="fs-lyrics-scroll" id="fsLyricsScroll">
+          <p class="fs-lyrics-empty">No Lyrics Available right now</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="fs-bottom-right">
+      <button class="fs-icon-btn" id="fsLyricsToggle" type="button" aria-label="Toggle lyrics">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg>
+      </button>
+      <button class="fs-icon-btn" id="fsQueueToggle" type="button" aria-label="Toggle queue">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M3 6h18v2H3V6zm0 5h18v2H3v-2zm0 5h12v2H3v-2z"/></svg>
+      </button>
+    </div>
   </div>
 
   <script src="js/moods.js"></script>
