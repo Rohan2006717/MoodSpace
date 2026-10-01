@@ -29,6 +29,8 @@
    const librarySearch = document.getElementById('librarySearch');
    
    const nowPanel = document.getElementById('nowPanel');
+   const nowScroll = nowPanel.querySelector('.now-scroll');
+   const nowResizeHandle = document.getElementById('nowResizeHandle');
    const nowCurrent = document.getElementById('nowCurrent');
    const nowQueueList = document.getElementById('nowQueueList');
    
@@ -315,6 +317,29 @@
    function openNowPanel() {
      nowPanel.classList.add('open');
    }
+
+   /* Drag the panel's left edge to resize it without letting it crowd out the library. */
+   nowResizeHandle.addEventListener('pointerdown', (event) => {
+     event.preventDefault();
+     nowResizeHandle.setPointerCapture(event.pointerId);
+     document.documentElement.classList.add('is-resizing-panel');
+
+     const resize = (moveEvent) => {
+       const nextWidth = Math.min(460, Math.max(280, window.innerWidth - moveEvent.clientX));
+       document.documentElement.style.setProperty('--now-panel', `${nextWidth}px`);
+     };
+
+     const stopResize = () => {
+       document.documentElement.classList.remove('is-resizing-panel');
+       nowResizeHandle.removeEventListener('pointermove', resize);
+       nowResizeHandle.removeEventListener('pointerup', stopResize);
+       nowResizeHandle.removeEventListener('pointercancel', stopResize);
+     };
+
+     nowResizeHandle.addEventListener('pointermove', resize);
+     nowResizeHandle.addEventListener('pointerup', stopResize);
+     nowResizeHandle.addEventListener('pointercancel', stopResize);
+   });
    
    lyricsMenuBtn.addEventListener('click', () => {
      setNowTab('lyrics');
@@ -429,7 +454,12 @@
        el.classList.toggle('active', idx === newIndex);
      });
      const activeLine = lyricsContent.querySelector(`[data-index="${newIndex}"]`);
-     if (activeLine && activeNowTab === 'lyrics') activeLine.scrollIntoView({ behavior: 'smooth', block: 'center' });
+     if (activeLine && activeNowTab === 'lyrics') {
+       // scrollIntoView() walks up through every scrollable ancestor, including
+       // the page. Move only the lyrics panel so the main view never jumps.
+       const targetTop = activeLine.offsetTop - (nowScroll.clientHeight - activeLine.offsetHeight) / 2;
+       nowScroll.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' });
+     }
    }
    
    /* ---------- Fullscreen player ---------- */
@@ -451,9 +481,7 @@
    const fsTimeTotal = document.getElementById('fsTimeTotal');
    const fsVolumeSlider = document.getElementById('fsVolumeSlider');
    const fsCloseBtn = document.getElementById('fsCloseBtn');
-   const fsExpandToggle = document.getElementById('fsExpandToggle');
    const fsLyricsToggle = document.getElementById('fsLyricsToggle');
-   const fsQueueToggle = document.getElementById('fsQueueToggle');
    const fsBody = document.getElementById('fsBody');
    const fsRight = document.getElementById('fsRight');
    const fsLyricsScroll = document.getElementById('fsLyricsScroll');
@@ -611,7 +639,6 @@
    
    // FS event listeners
    fsCloseBtn.addEventListener('click', closeFsPlayer);
-   fsExpandToggle.addEventListener('click', closeFsPlayer);
    
    fsPlayBtn.addEventListener('click', () => {
      if (!currentTrack.length) { playMood(activeMood); return; }
@@ -661,11 +688,6 @@
    
    fsLyricsToggle.addEventListener('click', toggleFsLyrics);
    
-   fsQueueToggle.addEventListener('click', () => {
-     closeFsPlayer();
-     setNowTab('queue');
-     openNowPanel();
-   });
    
    albumCoverButton.addEventListener('click', (e) => {
      e.stopPropagation();
@@ -815,7 +837,10 @@
        btn.className = 'mood-chip' + (id === activeMood ? ' is-active' : '');
        btn.innerHTML = '<span></span>';
        btn.querySelector('span').textContent = meta.label;
-       btn.addEventListener('click', () => setMood(id));
+       btn.addEventListener('click', () => {
+         setMood(id);
+         setView('home');
+       });
        root.appendChild(btn);
      });
    }
